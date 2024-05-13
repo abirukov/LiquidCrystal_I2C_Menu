@@ -464,7 +464,7 @@ void LiquidCrystal_I2C_Menu::printMultiline(const char str[]) {
       needRepaint = 0;
       clear();
       // Вывод фрамента текстовой строки
-      for (uint8_t i = 0; i < min(_rows, (charCount(str) + lineLength - 1) / lineLength); i++) {
+      for (int i = 0; i < std::min<int>(_rows, (charCount(str) + lineLength - 1) / lineLength); i++) {
         #ifdef CYRILLIC_DISPLAY
           substrUTF8(str, buffer, offset + i * lineLength, lineLength);
         #else
@@ -887,7 +887,7 @@ uint8_t LiquidCrystal_I2C_Menu::_selectVal(const char title[], T list[], uint8_t
       #else
         buffer = (char*) malloc (_cols + 1);
       #endif
-      for (uint8_t i = 0; i < min(count, _rows - hasTitle); i++) {
+      for (uint8_t i = 0; i < std::min<int>(count, _rows - hasTitle); i++) {
         _prepareForPrint(buffer, list[offset + i], lineLength);
         printfAt(0, i + hasTitle, "  %s ", buffer);
         if (show_selected) {
@@ -941,7 +941,7 @@ uint8_t LiquidCrystal_I2C_Menu::_selectVal(const char title[], T list[], uint8_t
           continue;
         }
       case eRight: {
-          if (cursorOffset < min(_rows - hasTitle, count) - 1) {
+          if (cursorOffset < std::min<int>(_rows - hasTitle, count) - 1) {
             printAt(0, cursorOffset + hasTitle, ' ');
             printAt(0, ++cursorOffset + hasTitle, '>');
           }
@@ -1034,7 +1034,7 @@ uint8_t LiquidCrystal_I2C_Menu::showSubMenu(uint8_t key) {
         printAt(0, 0, buffer);
       }
       //buffer[_cols] = 0;
-      for (uint8_t i = 0; i < min(subMenuLen, _rows - _showMenuTitle); i++) {
+      for (uint8_t i = 0; i < std::min<int>(subMenuLen, _rows - _showMenuTitle); i++) {
         #ifdef CYRILLIC_DISPLAY
           substrUTF8(subMenu[offset + i]->caption, buffer, 0, itemMaxLength);
         #else
@@ -1106,7 +1106,7 @@ uint8_t LiquidCrystal_I2C_Menu::showSubMenu(uint8_t key) {
           #ifdef SCROLL_LONG_CAPTIONS
             _scrollTime = millis() + DELAY_BEFORE_SCROLL;
           #endif
-          if (cursorOffset < min(_rows - _showMenuTitle, subMenuLen) - 1) {// Moving cursor down if possible
+          if (cursorOffset < std::min<int>(_rows - _showMenuTitle, subMenuLen) - 1) {// Moving cursor down if possible
             #ifdef SCROLL_LONG_CAPTIONS
               if (_scrollPos) {
                 // Если предыдущий пункт прокручивался, то печатаем его заново
