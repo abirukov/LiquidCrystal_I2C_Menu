@@ -1020,6 +1020,7 @@ uint8_t LiquidCrystal_I2C_Menu::showSubMenu(uint8_t key) {
 
   if (subMenuLen > _rows - _showMenuTitle) itemMaxLength--;
   do {
+    delay(5);
     if (needRepaint) {
       needRepaint = 0;
       clear();
@@ -1033,7 +1034,7 @@ uint8_t LiquidCrystal_I2C_Menu::showSubMenu(uint8_t key) {
         #endif
         printAt(0, 0, buffer);
       }
-      //buffer[_cols] = 0;
+      buffer[_cols] = 0;
       for (uint8_t i = 0; i < std::min<int>(subMenuLen, _rows - _showMenuTitle); i++) {
         #ifdef CYRILLIC_DISPLAY
           substrUTF8(subMenu[offset + i]->caption, buffer, 0, itemMaxLength);
