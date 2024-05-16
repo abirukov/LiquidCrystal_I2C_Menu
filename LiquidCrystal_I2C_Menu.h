@@ -329,6 +329,7 @@ template <typename T> T LiquidCrystal_I2C_Menu::inputValAt(uint8_t x, uint8_t y,
     lastActivityTime = millis();
   #endif
   while (1) {
+    delay(5);
     encoderState = getEncoderState();
     #ifdef INACTIVITY_TIMEOUT
       // Выход по таймауту
