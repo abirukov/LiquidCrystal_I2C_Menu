@@ -926,7 +926,7 @@ uint8_t LiquidCrystal_I2C_Menu::_selectVal(const char title[], T list[], uint8_t
     #endif
     switch (encoderState) {
       case eNone: {
-          encoderIdle();
+          encoderIdle(); //
           continue;
         }
       case eLeft: {
@@ -1186,7 +1186,7 @@ uint8_t LiquidCrystal_I2C_Menu::showSubMenu(uint8_t key) {
               }
             }
           #endif // SCROLL_LONG_CAPTIONS
-          encoderIdle();
+          needRepaint = encoderIdle(); //
         }
     }
   } while (1);
@@ -1196,8 +1196,13 @@ void LiquidCrystal_I2C_Menu::attachIdleFunc(void (*IdleFunc)(void)) {
   _IdleFunc = IdleFunc;
 }
 
-void LiquidCrystal_I2C_Menu::encoderIdle() {
+bool LiquidCrystal_I2C_Menu::encoderIdle() {
   if (_IdleFunc != NULL) (*_IdleFunc)();
+  if (millis() - menuRepaintTimer >= REPAINT_DELAY) {  // ищем разницу
+    menuRepaintTimer = millis();                   // сброс таймера
+    return 1;
+  }
+  return 0;
 }
 
 

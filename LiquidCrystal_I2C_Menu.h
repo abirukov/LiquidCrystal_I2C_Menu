@@ -6,6 +6,8 @@
 #include <Print.h>
 #include <stdarg.h>
 
+#define REPAINT_DELAY 5000 // Период перерисовки
+
 // commands
 #define LCD_CLEARDISPLAY 0x01
 #define LCD_RETURNHOME 0x02
@@ -258,6 +260,8 @@ class LiquidCrystal_I2C_Menu : public Print {
     uint8_t getSelectedMenuItem(){return _selectedMenuItem;};
     void attachIdleFunc(void (*IdleFunc)(void));
   private:
+    uint32_t menuRepaintTimer; 
+
     void send(uint8_t, uint8_t);
     void write4bits(uint8_t);
     void expanderWrite(uint8_t);
@@ -300,7 +304,7 @@ class LiquidCrystal_I2C_Menu : public Print {
     void _prepareForPrint(char [], int, uint8_t);
     void _prepareForPrint(char [], String, uint8_t);
     uint8_t showSubMenu(uint8_t);
-    void encoderIdle();
+    bool encoderIdle();
 };
 
 template <typename T> T LiquidCrystal_I2C_Menu::inputVal(const String &title, T minValue, T maxValue, T defaultValue, T step, void (*onChangeFunc)(T)) {
